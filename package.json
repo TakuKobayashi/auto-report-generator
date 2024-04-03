@@ -1,0 +1,31 @@
+{
+  "name": "auto-report-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "format:md": "prettier --config .prettierrc --write '**/*.md' --parser markdown",
+    "format:ts": "prettier --config .prettierrc --write \"**/*.{ts,js}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TakuKobayashi/auto-report-generator.git"
+  },
+  "author": "TakuKobayashi <keep_slimbody@yahoo.co.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TakuKobayashi/auto-report-generator/issues"
+  },
+  "homepage": "https://github.com/TakuKobayashi/auto-report-generator#readme",
+  "devDependencies": {
+    "@types/node": "^20.12.3",
+    "commander": "^12.0.0",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3",
+    "typings": "^2.1.1"
+  }
+}
