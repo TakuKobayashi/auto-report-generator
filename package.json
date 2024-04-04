@@ -7,8 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "format:md": "prettier --config .prettierrc --write '**/*.md' --parser markdown",
-    "format:ts": "prettier --config .prettierrc --write \"**/*.{ts,js}\""
+    "format": "prettier --config .prettierrc --write \"**/*.{ts,js}\"",
+    "ts-node": "ts-node",
+    "report": "ts-node src/cli.ts"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
     "typings": "^2.1.1"
+  },
+  "dependencies": {
+    "octokit": "^3.1.2"
   }
 }
