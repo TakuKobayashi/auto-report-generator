@@ -43,7 +43,7 @@ export class Github {
     return this.cachedMyUser;
   }
 
-  async searchSelfCommits(since: Date = new Date(), page: number = 1): Promise<GithubSearchResult> {
+  async searchSelfCommits(since: Date = new Date(), page: number = 1, perPage: number = 100): Promise<GithubSearchResult> {
     const myUser = await this.loadSelfUser();
     const searchCommitResponse = await this.octokit.rest.search.commits({
       q: `user:${myUser.login} committer-date:>=${since.toLocaleDateString('sv-SE')}`,
