@@ -37,7 +37,7 @@ program
     }
     const exportLines: string[] = [];
     exportLines.push(`# ${githubUser.login} ${nowDate.toLocaleDateString('ja-JP')}の日報`);
-    exportLines.push('##今日やったこと');
+    exportLines.push('## 今日やったこと');
     exportLines.push('');
     exportLines.push(`**本日のコミット件数: ${commits.total_count}**`);
     exportLines.push(`以下コミットした内容`);
@@ -48,7 +48,7 @@ program
       );
       exportLines.push(`  * 参照先:[${importSource.sha}](${importSource.html_url})`);
     }
-    fs.writeFileSync(`${nowDate.toLocaleDateString('sv-SE')}-${nowDate.toLocaleTimeString('sv-SE')}-report.md`, exportLines.join('\n'));
+    fs.writeFileSync(`${nowDate.toLocaleDateString('sv-SE')}-${nowDate.getHours()}-${nowDate.getMinutes()}-${nowDate.getSeconds()}-report.md`, exportLines.join('\n'));
   });
 
 program.parse(process.argv);
