@@ -48,7 +48,10 @@ program
       );
       exportLines.push(`  * 参照先:[${importSource.sha}](${importSource.html_url})`);
     }
-    fs.writeFileSync(`${nowDate.toLocaleDateString('sv-SE')}-${nowDate.getHours()}-${nowDate.getMinutes()}-${nowDate.getSeconds()}-report.md`, exportLines.join('\n'));
+    fs.writeFileSync(
+      `${nowDate.toLocaleDateString('sv-SE')}-${nowDate.getHours()}-${nowDate.getMinutes()}-${nowDate.getSeconds()}-report.md`,
+      exportLines.join('\n'),
+    );
   });
 
 program.parse(process.argv);

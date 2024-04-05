@@ -53,7 +53,7 @@ export class Github {
     return searchCommitResponse.data;
   }
 
-  async clearCache() {
+  clearCache() {
     this.cachedMyUser = null;
   }
 }
