@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { ApiClient, UsersApi, TasksApi } from 'asana';
 const client = ApiClient.instance;
 const token = client.authentications.token;
@@ -29,6 +30,7 @@ export interface AsanaTask {
   modified_at?: string | null;
   name: string;
   permalink_url: string;
+  projects: { gid: string; name: string; [field: string]: any }[];
   workspace: { gid: string; name?: string; [field: string]: any };
   [field: string]: any;
 }
@@ -49,17 +51,17 @@ export class Asana {
     return myUser;
   }
 
-  async loadSelfTasks(): Promise<AsanaTask[]> {
+  async loadSelfTasks(since: Date = new Date()): Promise<AsanaTask[]> {
     const selfUser = await this.loadSelfUser();
     const asanaTaskPromises: Promise<AsanaTask>[] = [];
     for (const workspace of selfUser.workspaces) {
       asanaTaskPromises.push(
         tasksApiInstance.getTasks({
           limit: 100,
+          completed_since: dayjs(since).startOf('day').toISOString(),
           workspace: workspace.gid,
           assignee: selfUser.gid,
-          opt_fields:
-            'approval_status,completed,completed_at,due_at,due_on,external,external.data,modified_at,name,offset,permalink_url,projects,projects.name,uri,workspace,workspace.name',
+          opt_fields: 'completed,completed_at,due_at,due_on,modified_at,name,permalink_url,projects,projects.name,workspace,workspace.name',
         }),
       );
     }

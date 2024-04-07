@@ -2,6 +2,7 @@ import { program } from 'commander';
 import packageJson from '../package.json';
 import { Github } from './imports/git/github';
 import fs from 'fs';
+import dayjs from 'dayjs';
 
 /**
  * Set global CLI configurations
@@ -36,7 +37,7 @@ program
       }
     }
     const exportLines: string[] = [];
-    exportLines.push(`# ${githubUser.login} ${nowDate.toLocaleDateString('ja-JP')}の日報`);
+    exportLines.push(`# ${githubUser.login} ${dayjs(nowDate).format('YYYY/MM/DD')}の日報`);
     exportLines.push('## 今日やったこと');
     exportLines.push('');
     exportLines.push(`**本日のコミット件数: ${commits.total_count}**`);
@@ -44,14 +45,11 @@ program
     for (const importSource of importSources) {
       const comitterDate = new Date(importSource.commit.committer.date);
       exportLines.push(
-        `* ${comitterDate.getHours()}:${comitterDate.getMinutes()}:${comitterDate.getSeconds()} [${importSource.repository.full_name}](${importSource.repository.html_url}) ${importSource.commit.message}`,
+        `* ${dayjs(nowDate).format('HH:MM:ss')} [${importSource.repository.full_name}](${importSource.repository.html_url}) ${importSource.commit.message}`,
       );
       exportLines.push(`  * 参照先:[${importSource.sha}](${importSource.html_url})`);
     }
-    fs.writeFileSync(
-      `${nowDate.toLocaleDateString('sv-SE')}-${nowDate.getHours()}-${nowDate.getMinutes()}-${nowDate.getSeconds()}-report.md`,
-      exportLines.join('\n'),
-    );
+    fs.writeFileSync(`${nowDate.toLocaleDateString('sv-SE')}-${dayjs(nowDate).format('HH-MM-ss')}-report.md`, exportLines.join('\n'));
   });
 
 program.parse(process.argv);
