@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { ApiClient, UsersApi, TasksApi } from 'asana';
+import _ from 'lodash';
 const client = ApiClient.instance;
 const token = client.authentications.token;
 
@@ -19,6 +20,14 @@ export interface AsanaWorkspace {
   gid: string;
   name: string;
   resource_type: string;
+}
+
+export interface AsanaTasksResponse {
+  data: AsanaTask[];
+  next_page: {
+    offset: string;
+    [extProperty: string]: any;
+  } | null;
 }
 
 export interface AsanaTask {
@@ -51,22 +60,25 @@ export class Asana {
     return myUser;
   }
 
-  async loadSelfTasks(since: Date = new Date()): Promise<AsanaTask[]> {
+  async loadSelfTasks(
+    workspaceGid: string,
+    since: Date = new Date(),
+    offset: string | null = null,
+    perPage: number = 100,
+  ): Promise<AsanaTasksResponse> {
     const selfUser = await this.loadSelfUser();
-    const asanaTaskPromises: Promise<AsanaTask>[] = [];
-    for (const workspace of selfUser.workspaces) {
-      asanaTaskPromises.push(
-        tasksApiInstance.getTasks({
-          limit: 100,
-          completed_since: dayjs(since).startOf('day').toISOString(),
-          workspace: workspace.gid,
-          assignee: selfUser.gid,
-          opt_fields: 'completed,completed_at,due_at,due_on,modified_at,name,permalink_url,projects,projects.name,workspace,workspace.name',
-        }),
-      );
-    }
-    const asanaTaskResponses = await Promise.all(asanaTaskPromises);
-    return asanaTaskResponses.map((asanaTaskResponse) => asanaTaskResponse.data);
+    const asanaTasksResponse = await tasksApiInstance.getTasks({
+      limit: perPage,
+      completed_since: dayjs(since).startOf('day').toISOString(),
+      workspace: workspaceGid,
+      assignee: selfUser.gid,
+      offset: offset,
+      opt_fields: 'completed,completed_at,due_at,due_on,modified_at,name,permalink_url,projects,projects.name,workspace,workspace.name',
+    });
+    return {
+      data: asanaTasksResponse.data,
+      next_page: asanaTasksResponse._response.next_page,
+    };
   }
 
   clearCache() {

@@ -5,5 +5,5 @@
 ## 実行方法(とりあえず)
 
 ```
-yarn run report generate --authtoken GITHUB-PERSONAL-ACCESSTOKEN
+yarn run report generate --githubauthtoken GITHUB-PERSONAL-ACCESSTOKEN --asanaauthtoken ASANA-PERSONAL-ACCESSTOKEN
 ```
